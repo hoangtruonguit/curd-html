@@ -1,0 +1,104 @@
+{
+  "student": [
+    {
+      "id" : "1",
+      "name": "Mai Trung A",
+      "birthday":"13/12/1992",
+      "sex" : "Nam",
+      "phone": "098123456",
+      "address" : "89 Chiaroscuro Rd, Portland, USA",
+      "faculty" : "CNTT",
+      "major" :  "Công nghệ phần mềm"
+    },
+    {
+      "id" : "2",
+      "name": "Nguyễn Văn A",
+      "birthday":"08/05/200",
+      "sex" : "Nam",
+      "phone": "0901765432",
+      "address" : "31 Lê Đại Hành",
+      "faculty" : "CNTT",
+      "major" :  "Kỹ Thuật máy tính"
+    },
+    {
+      "id" : "3",
+      "name": "Ngọc Trinh",
+      "birthday":"04/10/1990",
+      "sex" : "Nữ",
+      "phone": "09873696969",
+      "address" : "89 Nguyễn Văn Linh",
+      "faculty" : "Du Lịch",
+      "major" :  "Quản lý nhà hàng"
+    },
+    {
+      "id" : "4",
+      "name": "Lương Xuân Trương",
+      "birthday":"03/04/1995",
+      "sex" : "Nam",
+      "phone": "0932393939",
+      "address" : "12 Lương Định Của",
+      "faculty" : "Thanh nhạc",
+      "major" :  "Ca sỹ"
+    },
+    {
+      "id" : "5",
+      "name": "Ngô B",
+      "birthday":"20/11/1996",
+      "sex" : "Nam",
+      "phone": "0967890123",
+      "address" : "45 Trần Hưng Đạo",
+      "faculty" : "CNTT",
+      "major" :  "Hệ thống thông tin"
+    }
+  ],
+  "faculties": [
+    {
+      "name": "CNTT",
+      "id": "cntt",
+      "majors": [
+        {
+          "name": "Công nghệ phần mềm",
+          "id": "cnp,"
+        },
+        {
+          "name": "Kỹ thuật máy tính",
+          "id": "ktmt"
+        },
+        {
+          "name": "Hệ thống thông tin",
+          "id": "httt"
+        }
+      ]
+    },
+    {
+      "name": "Du Lịch",
+      "id": "dl",
+      "majors": [
+        {
+          "name": "Quan hệ quần chúng",
+          "id": "qhqc"
+        },
+        {
+          "name": "Quản lý nhà hàng",
+          "id": "qlnh"
+        }
+      ]
+    },
+    {
+      "name": "Thanh nhạc",
+      "id": "tn",
+      "majors": [
+        {
+          "name": "Ca sỹ",
+          "id": "cy"
+
+        },
+        {
+          "name": "Dương Cầm",
+          "id": "dc"
+
+        }
+      ]
+    }
+  ]
+}

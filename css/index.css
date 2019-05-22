@@ -263,5 +263,5 @@ table.table .avatar {
     font-weight: normal;
 }
 .has-error input[type="text"], .has-error input[type="email"], .has-error select {
-    border: 1px solid #a94442;
+    border: 1px solid #a94442 !important;
 }

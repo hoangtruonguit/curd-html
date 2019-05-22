@@ -1,11 +1,11 @@
 
-var facultyData = {};
+var dataJson = {};
 
 $(document).ready(function () {
 
     // Load data from Json file
     $.getJSON("data.json", function(json) {
-        facultyData = json;
+        dataJson = json;
         $.each(json.faculties, function (index, value) {
             $(".faculty").append('<option value="'+value.name+'">'+value.name+'</option>');
         });
@@ -18,73 +18,84 @@ $(document).ready(function () {
             bindingMajorValue("#add-major",json, $(this).val());
 
         });
-
-
+        handleCheckBox();
     });
-    // Activate tooltip
-    $('[data-toggle="tooltip"]').tooltip();
 
-    // Select/Deselect checkboxes
-    var checkbox = $('table tbody input[type="checkbox"]');
-    $("#selectAll").click(function () {
-        if (this.checked) {
-            checkbox.each(function () {
-                this.checked = true;
-            });
-        } else {
-            checkbox.each(function () {
-                this.checked = false;
-            });
-        }
-    });
-    checkbox.click(function () {
-        if (!this.checked) {
-            $("#selectAll").prop("checked", false);
-        }
-    });
 
     $('.datepicker').datepicker({
         language: 'vi',
         autoclose: true
     });
 
-    $('#add-student').on('click', function () {
-        var numberStudent = $('#list-student').find('tr').length;
-        var form =  $(this).closest("form");
-        var data = form.serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-        data.id = numberStudent + 1;
-         insertStudent('#list-student', data);
-         form[0].reset();
-        $('#addStudentModal').modal('hide');
-
-
+    $("#add-new-student").validator().on('submit', function(e){
+        if (e.isDefaultPrevented()) {
+            // handle the invalid form...
+        } else {
+            var numberStudent = dataJson.student.length;
+            var form =  $(this).closest("form");
+            form.validator();
+            var data = form.serializeArray().reduce(function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+            data.id = numberStudent + 1;
+            insertStudent('#list-student', data);
+            dataJson.student.push(data);
+            form[0].reset();
+            $('#addStudentModal').modal('hide');
+           handleCheckBox();
+            return false;
+        }
     });
 
     $('#btn-add-student').on('click', function () {
-        var numberStudent = $('#list-student').find('tr').length;
+        var numberStudent = dataJson.student.length;
         $('#id-student').val(numberStudent+1);
         $('#addStudentModal').modal('show');
     });
 
+    $('#btn-delete-student').on('click', function () {
+        var idStudent = $('#id-delete').val();
 
+        if(parseInt(idStudent)) {
+            $('#list-student tr[data-id="'+idStudent+'"] ').remove();
+        } else{
+            var checkbox = $('table tbody input[type="checkbox"]:checked');
+            if(checkbox.length){
+                $.each(checkbox, function(){
+                    $(this).closest('tr').remove();
+                });
+            } else{
+                alert('Nothing to delete');
+            }
+
+        }
+        $('#deleteStudentModal').modal('hide');
+
+    });
 
     $('#edit-student').on('click', function () {
-        var form =  $(this).closest("form");
-        var data = form.serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {});
-        var btnEdit = '#btn-edit-student[data-id="'+id+'"]';
-        var id= $(this).attr('data-id');
-        $.each(data, function (index, value) {
-            $('#list-student tr[data-id="'+id+'"] #'+index+'-student').text(value);
-            $(btnEdit).attr("data-"+index+"",value);
-        });
+        $("#form-edit-student").submit();
+    });
 
-        $('#editStudentModal').modal('hide');
+    $("#form-edit-student").validator().on('submit',function(e){
+        if (e.isDefaultPrevented()) {
+            // handle the invalid form...
+        } else {
+            var data = $("#form-edit-student").serializeArray().reduce(function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+            var id= $('#edit-student').attr('data-id');
+            var studentIndex = dataJson.student.findIndex(x => x.id == id);
+            $.each(data, function (index, value) {
+                $('#list-student tr[data-id="'+id+'"] #'+index+'-student').text(value);
+                dataJson.student[studentIndex][index] = value;
+            });
+
+            $('#editStudentModal').modal('hide');
+            return false;
+        }
     });
 
 
@@ -107,39 +118,42 @@ function insertStudent(el, data){
         '<td id="faculty-student" >'+data.faculty+'</td> ' +
         '<td id="major-student" >'+data.major+'</td> ' +
         '<td> ' +
-        '<a href="#" class="edit" onclick="showInfoModal(this)" id="btn-edit-student"  data-id="'+data.id+'" data-name="'+data.name+'" data-birthday="'+data.birthday+'"' +
-        ' data-sex="'+data.sex+'" data-address="'+data.address+'" data-phone="'+data.phone+'" data-faculty="'+data.faculty+'" data-major="'+data.major+'" > ' +
+        '<a href="#" class="edit" onclick="showInfoModal('+data.id+')" >' +
         '<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i> ' +
         '</a> ' +
         '</td> ' +
         '<td> ' +
-        '<a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="'+data.id+'"> ' +
+        '<a href="#" class="delete" data-toggle="modal"  onclick="showDeleteModal('+data.id+')"> ' +
         '<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i> ' +
         '</a> ' +
         '</td> ' +
         '</tr>');
 }
 
-function showInfoModal(el) {
-    var data = $(el).data();
-    console.log(data);
-    bindingMajorValue("#edit-major",facultyData, data.faculty);
+function showInfoModal(id) {
+    var student = dataJson.student.find(x => x.id == id);
+    bindingMajorValue("#edit-major",dataJson, student.faculty);
 
-
-    $.each(data, function (index, value) {
+    $.each(student, function (index, value) {
             $('#editStudentModal input[name="'+index+'"]').val(value);
             $('#editStudentModal select[name="'+index+'"]').val(value);
             $('#editStudentModal textarea[name="'+index+'"]').val(value);
     });
 
     $('#edit-faculty').on('change', function(){
-        bindingMajorValue("#edit-major",facultyData, $(this).val());
+        bindingMajorValue("#edit-major",dataJson, $(this).val());
 
     });
 
-    $('#edit-student').attr('data-id', data.id);
+    $('#edit-student').attr('data-id', student.id);
     $('#editStudentModal').modal('show');
 }
+
+function showDeleteModal(id) {
+    $('#id-delete').val( id);
+    $('#deleteStudentModal').modal('show');
+}
+
 
 function bindingMajorValue(el, data, value) {
     for(var i = 0; i < data.faculties.length; i++)
@@ -155,4 +169,27 @@ function bindingMajorValue(el, data, value) {
             $(el).find('option').remove()
         }
     }
+}
+
+function handleCheckBox() {
+    var checkbox = $('table tbody input[type="checkbox"]');
+    $("#selectAll").on('click', function () {
+        if (this.checked) {
+            checkbox.each(function () {
+                this.checked = true;
+            });
+        } else {
+            checkbox.each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    checkbox.on('click', function () {
+        if (!this.checked) {
+            $("#selectAll").prop("checked", false);
+        }
+    });
+
+    // Activate tooltip
+    $('[data-toggle="tooltip"]').tooltip();
 }

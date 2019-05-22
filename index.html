@@ -30,7 +30,7 @@
                 <div class="col-sm-6">
                     <a  class="btn btn-success" id="btn-add-student" data-toggle="modal"><i class="material-icons">&#xE147;</i>
                         <span>Thêm Sinh Viên</span></a>
-                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i>
+                    <a href="#" onclick="showDeleteModal(0)" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i>
                         <span>Xóa</span></a>
                 </div>
             </div>
@@ -69,7 +69,7 @@
 <div id="addStudentModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" id="add-new-student"  class="form-horizontal" role="form" >
+            <form method="post" id="add-new-student"  class="form-horizontal"  >
                 <div class="modal-header">
                     <h4 class="modal-title">Thêm Sinh Viên</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -84,7 +84,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Họ Tên*</label>
                         <div class="col-sm-10">
-                            <input type="text" name="name" class="form-control" required>
+                            <input type="text" name="name" class="form-control" data-error="Vui lòng điền tên" required>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -101,8 +102,11 @@
                         <label class="col-sm-2 control-label" >Ngày Sinh*</label>
                         <div class="col-sm-10">
                             <div class="input-group date ">
-                                <input type="text" name="birthday" class="form-control datepicker"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                <input type="text" name="birthday" class="form-control datepicker" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+
                             </div>
+                            <div class="help-block with-errors"></div>
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -114,29 +118,32 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Số điện thoại*</label>
                         <div class="col-sm-10">
-                            <input type="text"  name="phone" class="form-control" required>
+                            <input type="tel"  name="phone" class="form-control"  pattern="^(09|01[2|6|8|9])+([0-9]{8})$" required>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Khoa*</label>
                         <div class="col-sm-10">
-                            <select name="faculty" id="add-faculty" class="form-control faculty">
+                            <select name="faculty" id="add-faculty" class="form-control faculty" required>
                                 <option value="000">-Chọn Khoa-</option>
                             </select>
+                            <div class="help-block with-errors"></div>
                         </div>
+
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Chuyên Ngành*</label>
                         <div class="col-sm-10">
-                            <select name="major" id='add-major' class="form-control">
+                            <select name="major" id='add-major' class="form-control" required>
                             </select>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
-                    <input type="button" id="add-student" class="btn btn-success" value="Thêm">
+                    <input type="submit" id="" class="btn btn-success" value="Thêm">
                 </div>
             </form>
         </div>
@@ -149,7 +156,7 @@
 <div id="editStudentModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post"   class="form-horizontal" role="form" >
+            <form method="post"   class="form-horizontal"  id="form-edit-student" role="form" data-toggle="validator" >
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Sinh Vien</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -164,7 +171,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Họ Tên*</label>
                         <div class="col-sm-10">
-                            <input type="text" name="name" class="form-control" required>
+                            <input type="text" name="name" class="form-control" data-error="Vui lòng điền tên" required>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -174,6 +182,7 @@
                                 <option>Nam</option>
                                 <option>Nữ</option>
                             </select>
+                            <div class="help-block with-errors"></div>
                         </div>
 
                     </div>
@@ -181,8 +190,9 @@
                         <label class="col-sm-2 control-label" >Ngày Sinh*</label>
                         <div class="col-sm-10">
                             <div class="input-group date ">
-                                <input type="text" name="birthday" class="form-control datepicker"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                <input type="text" name="birthday" class="form-control datepicker" required><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                             </div>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -194,23 +204,27 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Số điện thoại*</label>
                         <div class="col-sm-10">
-                            <input type="text"  name="phone" class="form-control" required>
+                            <input type="tel"  name="phone" class="form-control"  pattern="^(09|01[2|6|8|9])+([0-9]{8})$" required>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Khoa*</label>
                         <div class="col-sm-10">
-                            <select name="faculty" id="edit-faculty" class="form-control faculty">
+                            <select name="faculty" id="edit-faculty" class="form-control faculty" required>
                                 <option value="000">-Chọn Khoa-</option>
                             </select>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" >Chuyên Ngành*</label>
                         <div class="col-sm-10">
-                            <select name="major" id='edit-major' class="form-control">
+                            <select name="major" id='edit-major' class="form-control" required>
 
                             </select>
+                            <div class="help-block with-errors"></div>
+
                         </div>
                     </div>
 
@@ -224,10 +238,11 @@
     </div>
 </div>
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="deleteStudentModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form>
+                <input type="hidden" id="id-delete">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Employee</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -239,8 +254,8 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-danger" value="Delete">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+                    <input type="submit"  id="btn-delete-student" class="btn btn-danger " value="Xóa">
                 </div>
             </form>
         </div>
